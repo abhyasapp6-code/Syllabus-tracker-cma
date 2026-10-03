@@ -36,7 +36,7 @@ table{width:100%;border-collapse:collapse;min-width:620px}th,td{padding:9px;bord
   <div class="card"><div class="label">Overall Completion</div><div class="value" id="overall">0%</div></div>
   <div class="card"><div class="label">Classes Completed</div><div class="value" id="doneClasses">0</div></div>
   <div class="card"><div class="label">Classes Remaining</div><div class="value" id="leftClasses">0</div></div>
-  <div class="card"><div class="label">Topics Completed</div><div class="value" id="doneTopics">0 / 26</div></div>
+  <div class="card"><div class="label">Topics Completed</div><div class="value" id="doneTopics">0 / 24</div></div>
 </div>
 
 <div class="card" style="margin-top:12px">
@@ -72,18 +72,56 @@ table{width:100%;border-collapse:collapse;min-width:620px}th,td{padding:9px;bord
 </div>
 
 
-<div class="section"><h2>✏️ Update Classes</h2><span style="font-size:11px;color:var(--muted)">Select a topic instead of scrolling</span></div>
+
+<div class="section"><h2>✅ Complete Class</h2><span style="font-size:11px;color:var(--muted)">One tap = one completed class</span></div>
 <div class="card">
-  <div class="editor">
-    <div class="field selectbox"><label>Select Module / Topic</label><select id="moduleSelect" onchange="loadEditor()"></select></div>
-    <div class="field"><label>Total Classes</label><input id="totalInput" type="number" min="0"></div>
-    <div class="field"><label>Completed Classes</label><input id="completedInput" type="number" min="0"></div>
-    <button onclick="saveModule()">Save</button>
+  <div class="field">
+    <label>Select Module / Topic</label>
+    <select id="moduleSelect" onchange="loadCompletionPanel()"></select>
   </div>
-  <div class="note">After saving, the class-entry fields stay here and the syllabus cards below show only the progress. You can select any topic from the dropdown whenever you need to update it again.</div>
+
+  <div id="completionPanel" style="margin-top:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:#f5f8fc;border-radius:11px">
+      <div>
+        <div style="font-size:11px;color:var(--muted)">Current Progress</div>
+        <strong id="selectedProgress">0 / 0 classes</strong>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11px;color:var(--muted)">Remaining</div>
+        <strong id="selectedRemaining">0</strong>
+      </div>
+    </div>
+
+    <div class="actions" style="margin-top:12px">
+      <button onclick="completeClasses(1)">✓ Complete 1 Class</button>
+      <button class="secondary" onclick="completeClasses(2)">✓ Complete 2 Classes</button>
+      <button class="secondary" onclick="completeClasses(3)">✓ Complete 3 Classes</button>
+    </div>
+
+    <div class="note">
+      Every time you finish a class, simply select the topic and tap <b>Complete 1 Class</b>.
+      You do not need to enter the total or completed class count again.
+      Progress and overall syllabus percentage update automatically.
+    </div>
+
+    <div class="actions">
+      <button class="secondary" onclick="openEditProgress()">✏️ Edit Progress</button>
+    </div>
+
+    <div id="editPanel" style="display:none;margin-top:10px;padding:12px;background:#fff8e7;border-radius:11px">
+      <div class="field">
+        <label>Correct completed-class count</label>
+        <input id="editCompleted" type="number" min="0">
+      </div>
+      <div class="actions">
+        <button onclick="saveEditedProgress()">Save Correction</button>
+        <button class="danger" onclick="closeEditProgress()">Cancel</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="section"><h2>📖 Syllabus</h2><span id="topicSummary">0 / 26 completed</span></div>
+<div class="section"><h2>📖 Syllabus</h2><span id="topicSummary">0 / 24 completed</span></div>
 <div class="modules" id="modules"></div>
 
 <div class="section"><h2>⚙️ Settings & Backup</h2></div>
@@ -130,15 +168,36 @@ const SYLLABUS=[
 "SEBI",
 "MSME",
 "SARFAESI Act, 2002",
-"Deposits",
-"SEBI / Economic Laws – Additional Topic",
-"Other / Revision"
+"Deposits"
 ];
 
 function fresh(){
  return {examDate:"",modules:SYLLABUS.map(n=>({name:n,total:0,completed:0})),daily:{}};
 }
+
 let data=load();
+
+function applyScreenshotBaselineOnce(){
+  const BASELINE_VERSION = "screenshot-baseline-v1";
+  if(localStorage.getItem("cma_tracker_baseline_version") === BASELINE_VERSION) return;
+
+  const baseline = [
+    [13,13],[7,7],[3,3],[1,0],[2,0],[2,0],[2,0],[2,0],
+    [3,0],[5,0],[7,7],[1,0],[1,0],[1,0],[3,0],[5,0],
+    [2,0],[2,0],[1,0],[1,0],[5,0],[1,0],[2,0],[1,0]
+  ];
+
+  data.modules = SYLLABUS.map((name,i)=>({
+    name,
+    total: baseline[i][0],
+    completed: baseline[i][1]
+  }));
+
+  save();
+  localStorage.setItem("cma_tracker_baseline_version", BASELINE_VERSION);
+}
+applyScreenshotBaselineOnce();
+
 
 function load(){
  try{
@@ -165,21 +224,68 @@ function esc(x){return String(x).replaceAll("&","&amp;").replaceAll("<","&lt;").
 function buildSelect(){
  const s=document.getElementById("moduleSelect");
  s.innerHTML=SYLLABUS.map((n,i)=>`<option value="${i}">${i+1} — ${esc(n)}</option>`).join("");
- loadEditor();
+ loadCompletionPanel();
 }
-function loadEditor(){
+
+function loadCompletionPanel(){
  const i=Number(document.getElementById("moduleSelect").value);
  const x=data.modules[i];
- document.getElementById("totalInput").value=x.total;
- document.getElementById("completedInput").value=x.completed;
+ const p=pct(x);
+ document.getElementById("selectedProgress").textContent=`${x.completed} / ${x.total} classes (${p.toFixed(1)}%)`;
+ document.getElementById("selectedRemaining").textContent=Math.max(0,x.total-x.completed);
+ document.getElementById("editCompleted").value=x.completed;
+ closeEditProgress();
 }
-function saveModule(){
+
+function completeClasses(count){
  const i=Number(document.getElementById("moduleSelect").value);
- const total=Math.max(0,Number(document.getElementById("totalInput").value)||0);
- const completed=Math.max(0,Number(document.getElementById("completedInput").value)||0);
- if(completed>total){alert("Completed classes cannot be greater than total classes.");return;}
- data.modules[i].total=total;data.modules[i].completed=completed;
- save();render();loadEditor();
+ const x=data.modules[i];
+ const available=Math.max(0,x.total-x.completed);
+
+ if(x.total<=0){
+   alert("Total classes for this topic have not been set yet.");
+   return;
+ }
+
+ if(available<=0){
+   alert("This topic is already 100% completed.");
+   return;
+ }
+
+ const actual=Math.min(count,available);
+ x.completed+=actual;
+ save();
+ render();
+ loadCompletionPanel();
+
+ const message=actual===1 ? "1 class marked as completed." : `${actual} classes marked as completed.`;
+ alert(message);
+}
+
+function openEditProgress(){
+ document.getElementById("editPanel").style.display="block";
+ document.getElementById("editCompleted").focus();
+}
+
+function closeEditProgress(){
+ document.getElementById("editPanel").style.display="none";
+}
+
+function saveEditedProgress(){
+ const i=Number(document.getElementById("moduleSelect").value);
+ const x=data.modules[i];
+ const value=Math.max(0,Number(document.getElementById("editCompleted").value)||0);
+
+ if(value>x.total){
+   alert(`Completed classes cannot exceed the total of ${x.total} classes.`);
+   return;
+ }
+
+ x.completed=value;
+ save();
+ render();
+ loadCompletionPanel();
+ alert("Progress corrected successfully.");
 }
 function render(){
  const box=document.getElementById("modules");box.innerHTML="";
@@ -199,8 +305,8 @@ function render(){
  document.getElementById("overall2").textContent=overall.toFixed(1)+"%";
  document.getElementById("doneClasses").textContent=done;
  document.getElementById("leftClasses").textContent=left;
- document.getElementById("doneTopics").textContent=topics+" / 26";
- document.getElementById("topicSummary").textContent=topics+" / 26 completed";
+ document.getElementById("doneTopics").textContent=topics+" / "+SYLLABUS.length;
+ document.getElementById("topicSummary").textContent=topics+" / 24 completed";
  document.getElementById("summary").textContent=`${done} of ${total} classes completed`;
  document.getElementById("overallBar").style.width=overall+"%";
  updatePace(left);renderHistory();
@@ -250,7 +356,7 @@ function importData(e){
   if(!incoming||!Array.isArray(incoming.modules))throw 0;
   const freshData=fresh();freshData.examDate=typeof incoming.examDate==="string"?incoming.examDate:"";freshData.daily=incoming.daily||{};
   freshData.modules=SYLLABUS.map((name,i)=>{const x=incoming.modules[i]||{};return{name,total:Math.max(0,Number(x.total)||0),completed:Math.min(Math.max(0,Number(x.total)||0),Math.max(0,Number(x.completed)||0))}});
-  data=freshData;save();document.getElementById("examDate").value=data.examDate;render();loadEditor();countdown();alert("Backup imported successfully.");
+  data=freshData;save();document.getElementById("examDate").value=data.examDate;render();loadCompletionPanel();countdown();alert("Backup imported successfully.");
  }catch(err){alert("Invalid backup file. Existing data was not changed.")}e.target.value=""};r.readAsText(f)
 }
 function resetAll(){if(confirm("Delete all tracker data from this browser?")){localStorage.removeItem(KEY);data=fresh();document.getElementById("examDate").value="";buildSelect();render();countdown();clearDaily()}}
