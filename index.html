@@ -64,11 +64,15 @@ table{width:100%;border-collapse:collapse;min-width:620px}th,td{padding:9px;bord
   </div>
   <div class="field" style="margin-top:10px"><label>Notes</label><textarea id="notes" placeholder="What did you study today?"></textarea></div>
   <div class="actions"><button onclick="saveDaily()">Save Daily Progress</button><button class="secondary" onclick="clearDaily()">Clear</button></div>
+  <div id="dailyEditMode" style="display:none;margin-top:10px;padding:10px;background:#fff8e7;border-radius:10px;font-size:12px">
+    <span id="dailyEditLabel"></span>
+    <button class="danger" style="margin-left:8px" onclick="cancelDailyEdit()">Cancel Edit</button>
+  </div>
 </div>
 
 <div class="card scroll" style="margin-top:12px">
   <div class="section" style="margin-top:0"><h2>Daily History</h2></div>
-  <table><thead><tr><th>Date</th><th>Planned</th><th>Completed</th><th>Hours</th><th>Notes</th></tr></thead><tbody id="history"></tbody></table>
+  <table><thead><tr><th>Date</th><th>Planned</th><th>Completed</th><th>Hours</th><th>Notes</th><th>Action</th></tr></thead><tbody id="history"></tbody></table>
 </div>
 
 
@@ -338,12 +342,60 @@ function saveDaily(){
  save();renderHistory();alert("Daily progress saved locally.")
 }
 function renderHistory(){
- const body=document.getElementById("history"),arr=Object.entries(data.daily).sort((a,b)=>b[0].localeCompare(a[0]));
- body.innerHTML=arr.length?arr.map(([d,v])=>`<tr><td>${esc(d)}</td><td>${v.planned||0}</td><td>${v.completed||0}</td><td>${v.hours||0}</td><td>${esc(v.notes||"")}</td></tr>`).join(""):`<tr><td colspan="5">No records yet.</td></tr>`;
- let streak=0,cur=new Date();const set=new Set(arr.filter(([d,v])=>(v.completed||0)>0||(v.hours||0)>0).map(x=>x[0]));
- while(set.has(key(cur))){streak++;cur.setDate(cur.getDate()-1)}
+ const body=document.getElementById("history");
+ const arr=Object.entries(data.daily).sort((a,b)=>b[0].localeCompare(a[0]));
+
+ body.innerHTML=arr.length
+ ? arr.map(([d,v])=>`
+   <tr>
+     <td>${esc(d)}</td>
+     <td>${v.planned||0}</td>
+     <td>${v.completed||0}</td>
+     <td>${v.hours||0}</td>
+     <td>${esc(v.notes||"")}</td>
+     <td><button class="secondary" onclick="editDaily('${d}')">✏️ Edit</button></td>
+   </tr>
+ `).join("")
+ : `<tr><td colspan="6">No records yet.</td></tr>`;
+
+ let streak=0,cur=new Date();
+ const set=new Set(
+   arr.filter(([d,v])=>(v.completed||0)>0||(v.hours||0)>0).map(x=>x[0])
+ );
+ while(set.has(key(cur))){
+   streak++;
+   cur.setDate(cur.getDate()-1);
+ }
  document.getElementById("streak").textContent="Streak: "+streak+" day"+(streak===1?"":"s");
 }
+
+function editDaily(date){
+ const v=data.daily[date];
+ if(!v)return;
+
+ document.getElementById("date").value=date;
+ document.getElementById("planned").value=v.planned||"";
+ document.getElementById("dailyDone").value=v.completed||"";
+ document.getElementById("hours").value=v.hours||"";
+ document.getElementById("notes").value=v.notes||"";
+
+ document.getElementById("dailyEditMode").style.display="block";
+ document.getElementById("dailyEditLabel").textContent=`Editing: ${date}`;
+
+ window.scrollTo({
+   top:document.getElementById("date").getBoundingClientRect().top + window.scrollY - 90,
+   behavior:"smooth"
+ });
+}
+
+function cancelDailyEdit(){
+ const today=key(new Date());
+ document.getElementById("date").value=today;
+ clearDaily();
+ document.getElementById("date").value=today;
+ document.getElementById("dailyEditMode").style.display="none";
+}
+
 function clearDaily(){["planned","dailyDone","hours","notes"].forEach(id=>document.getElementById(id).value="")}
 function exportData(){
  const blob=new Blob([JSON.stringify({app:"CMA Syllabus Tracker",version:2,exportedAt:new Date().toISOString(),data},null,2)],{type:"application/json"});
