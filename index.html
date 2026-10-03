@@ -1,1 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CMA Final Corporate & Economic Laws — Syllabus Tracker</title>
+<style>
+:root{--p:#075fd6;--p2:#0a43b8;--bg:#f4f7fb;--card:#fff;--text:#17243a;--muted:#6d7889;--line:#e1e7ef;--ok:#138a55;--warn:#b56b00;--danger:#c0392b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+header{background:linear-gradient(135deg,#063db0,#1268e8);color:white;padding:22px 16px 20px;box-shadow:0 4px 18px #0002}
+header h1{margin:0 auto;max-width:1050px;font-size:22px}header p{max-width:1050px;margin:7px auto 0;font-size:13px;opacity:.9}
+main{max-width:1050px;margin:auto;padding:14px}.grid{display:grid;gap:12px}.stats{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px;box-shadow:0 5px 18px #193a6010}
+.label{font-size:11px;color:var(--muted)}.value{font-size:25px;font-weight:700;margin-top:4px}
+.progress{height:12px;background:#e8edf3;border-radius:99px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,#075fd6,#18a6d5);transition:.2s}
+.section{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:20px 0 9px}.section h2{font-size:18px;margin:0}
+.countdown{grid-template-columns:repeat(4,1fr)}.time{text-align:center;background:#eef5ff;border-radius:12px;padding:12px}.time b{display:block;font-size:25px;color:var(--p2)}.time span{font-size:11px;color:var(--muted)}
+.modules{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.module{padding:14px}
+.top{display:flex;gap:10px;align-items:flex-start}.num{min-width:36px;height:36px;border-radius:10px;background:#e9f2ff;color:var(--p2);font-weight:700;display:grid;place-items:center}.name{font-weight:700;line-height:1.35;font-size:14px}.status{margin-left:auto;font-size:10px;border-radius:20px;padding:5px 8px;background:#edf0f3;color:#667;white-space:nowrap}.status.done{background:#e6f7ee;color:var(--ok)}.status.go{background:#eaf3ff;color:var(--p2)}
+.moduleinfo{display:flex;justify-content:space-between;margin:12px 0 6px;font-size:12px;color:var(--muted)}
+.editor{display:grid;grid-template-columns:1.6fr 1fr 1fr auto;gap:9px;align-items:end}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:14px}
+button{border:0;border-radius:9px;padding:10px 13px;background:var(--p);color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#eaf1f8;color:#164c91}button.danger{background:#fff0ee;color:var(--danger)}
+.daily{grid-template-columns:repeat(4,1fr)}textarea{width:100%;min-height:70px;border:1px solid var(--line);border-radius:9px;padding:10px;resize:vertical}
+table{width:100%;border-collapse:collapse;min-width:620px}th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left;font-size:12px}th{color:var(--muted)}
+.scroll{overflow:auto}.note{background:#fff8e7;color:#805700;border-radius:10px;padding:10px;font-size:12px;margin-top:10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}.footer{text-align:center;color:var(--muted);font-size:11px;padding:22px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.modules{grid-template-columns:1fr}.editor{grid-template-columns:1fr 1fr}.editor .selectbox{grid-column:1/-1}.countdown{grid-template-columns:repeat(2,1fr)}.daily{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:430px){main{padding:10px}.stats{gap:8px}.value{font-size:21px}.editor{grid-template-columns:1fr}.editor .selectbox{grid-column:auto}.daily{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>📚 CMA Final — Corporate & Economic Laws</h1><p>26-topic syllabus tracker • Progress is saved locally on this device only.</p></header>
+<main>
 
+<div class="grid stats">
+  <div class="card"><div class="label">Overall Completion</div><div class="value" id="overall">0%</div></div>
+  <div class="card"><div class="label">Classes Completed</div><div class="value" id="doneClasses">0</div></div>
+  <div class="card"><div class="label">Classes Remaining</div><div class="value" id="leftClasses">0</div></div>
+  <div class="card"><div class="label">Topics Completed</div><div class="value" id="doneTopics">0 / 26</div></div>
+</div>
+
+<div class="card" style="margin-top:12px">
+  <div class="section" style="margin-top:0"><h2>Overall Syllabus Progress</h2><b id="pace">—</b></div>
+  <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)"><span id="summary">0 of 0 classes completed</span><b id="overall2">0%</b></div>
+  <div class="progress" style="height:18px;margin-top:7px"><div class="bar" id="overallBar"></div></div>
+  <div class="note" id="paceNote">Set the exam date and class counts to calculate your required daily pace.</div>
+</div>
+
+<div class="section"><h2>⏳ Exam Countdown</h2><span id="examLabel" style="font-size:12px;color:var(--muted)">Not set</span></div>
+<div class="grid countdown">
+  <div class="card time"><b id="d">0</b><span>Days</span></div>
+  <div class="card time"><b id="h">0</b><span>Hours</span></div>
+  <div class="card time"><b id="m">0</b><span>Minutes</span></div>
+  <div class="card time"><b id="s">0</b><span>Seconds</span></div>
+</div>
+
+<div class="section"><h2>📝 Daily Study</h2><span id="streak">Streak: 0 days</span></div>
+<div class="card">
+  <div class="grid daily">
+    <div class="field"><label>Date</label><input id="date" type="date"></div>
+    <div class="field"><label>Classes Planned</label><input id="planned" type="number" min="0"></div>
+    <div class="field"><label>Classes Completed</label><input id="dailyDone" type="number" min="0"></div>
+    <div class="field"><label>Study Hours</label><input id="hours" type="number" min="0" step=".25"></div>
+  </div>
+  <div class="field" style="margin-top:10px"><label>Notes</label><textarea id="notes" placeholder="What did you study today?"></textarea></div>
+  <div class="actions"><button onclick="saveDaily()">Save Daily Progress</button><button class="secondary" onclick="clearDaily()">Clear</button></div>
+</div>
+
+<div class="card scroll" style="margin-top:12px">
+  <div class="section" style="margin-top:0"><h2>Daily History</h2></div>
+  <table><thead><tr><th>Date</th><th>Planned</th><th>Completed</th><th>Hours</th><th>Notes</th></tr></thead><tbody id="history"></tbody></table>
+</div>
+
+
+<div class="section"><h2>✏️ Update Classes</h2><span style="font-size:11px;color:var(--muted)">Select a topic instead of scrolling</span></div>
+<div class="card">
+  <div class="editor">
+    <div class="field selectbox"><label>Select Module / Topic</label><select id="moduleSelect" onchange="loadEditor()"></select></div>
+    <div class="field"><label>Total Classes</label><input id="totalInput" type="number" min="0"></div>
+    <div class="field"><label>Completed Classes</label><input id="completedInput" type="number" min="0"></div>
+    <button onclick="saveModule()">Save</button>
+  </div>
+  <div class="note">After saving, the class-entry fields stay here and the syllabus cards below show only the progress. You can select any topic from the dropdown whenever you need to update it again.</div>
+</div>
+
+<div class="section"><h2>📖 Syllabus</h2><span id="topicSummary">0 / 26 completed</span></div>
+<div class="modules" id="modules"></div>
+
+<div class="section"><h2>⚙️ Settings & Backup</h2></div>
+<div class="card">
+  <div class="grid" style="grid-template-columns:1fr 1fr">
+    <div class="field"><label>Exam Date</label><input id="examDate" type="date"></div>
+    <div style="font-size:12px;color:var(--ok);padding:11px;background:#edf9f2;border-radius:9px">✓ No Firebase • No server • No cloud database<br>Everything stays in localStorage.</div>
+  </div>
+  <div class="actions">
+    <button onclick="saveExam()">Save Exam Date</button>
+    <button class="secondary" onclick="exportData()">Export Backup</button>
+    <button class="secondary" onclick="document.getElementById('file').click()">Import Backup</button>
+    <button class="danger" onclick="resetAll()">Reset All Data</button>
+    <input id="file" type="file" accept=".json" hidden onchange="importData(event)">
+  </div>
+</div>
+<div class="footer">CMA Syllabus Tracker • Local data only</div>
+</main>
+
+<script>
+const KEY="cma_corporate_economic_law_tracker_v2";
+
+const SYLLABUS=[
+"BOD & KMP",
+"Company Formation & Conversion",
+"Board Meetings",
+"Investment & Deposits",
+"Inspection, Inquiry and Investigation",
+"Compromise and Arrangement",
+"Oppression & Mismanagement",
+"Dividend",
+"Accounts of Companies",
+"Auditor",
+"Insolvency & Bankruptcy Code, 2016",
+"CG-(CONCEPTS AND ISSUES)",
+"CG-(Practices & Codes in India)",
+"CG & CSR",
+"Competition Act, 2002",
+"FEMA",
+"The Banking Regulation Act, 1949",
+"The Insurance Act, 1938",
+"CYBER LAWS",
+"PMLA",
+"SEBI",
+"MSME",
+"SARFAESI Act, 2002",
+"Deposits",
+"SEBI / Economic Laws – Additional Topic",
+"Other / Revision"
+];
+
+function fresh(){
+ return {examDate:"",modules:SYLLABUS.map(n=>({name:n,total:0,completed:0})),daily:{}};
+}
+let data=load();
+
+function load(){
+ try{
+  const x=JSON.parse(localStorage.getItem(KEY)||"null");
+  if(!x)return fresh();
+  const base=fresh();
+  base.examDate=typeof x.examDate==="string"?x.examDate:"";
+  base.daily=x.daily&&typeof x.daily==="object"?x.daily:{};
+  if(Array.isArray(x.modules)){
+   base.modules=SYLLABUS.map((name,i)=>{
+    const old=x.modules[i]||{};
+    return {name,total:Math.max(0,Number(old.total)||0),completed:Math.max(0,Number(old.completed)||0)};
+   });
+  }
+  base.modules.forEach(clamp);
+  return base;
+ }catch(e){return fresh();}
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));}
+function clamp(x){x.total=Math.max(0,Number(x.total)||0);x.completed=Math.min(x.total,Math.max(0,Number(x.completed)||0));}
+function pct(x){return x.total?x.completed/x.total*100:0}
+function esc(x){return String(x).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+
+function buildSelect(){
+ const s=document.getElementById("moduleSelect");
+ s.innerHTML=SYLLABUS.map((n,i)=>`<option value="${i}">${i+1} — ${esc(n)}</option>`).join("");
+ loadEditor();
+}
+function loadEditor(){
+ const i=Number(document.getElementById("moduleSelect").value);
+ const x=data.modules[i];
+ document.getElementById("totalInput").value=x.total;
+ document.getElementById("completedInput").value=x.completed;
+}
+function saveModule(){
+ const i=Number(document.getElementById("moduleSelect").value);
+ const total=Math.max(0,Number(document.getElementById("totalInput").value)||0);
+ const completed=Math.max(0,Number(document.getElementById("completedInput").value)||0);
+ if(completed>total){alert("Completed classes cannot be greater than total classes.");return;}
+ data.modules[i].total=total;data.modules[i].completed=completed;
+ save();render();loadEditor();
+}
+function render(){
+ const box=document.getElementById("modules");box.innerHTML="";
+ let total=0,done=0,topics=0;
+ data.modules.forEach((x,i)=>{
+  clamp(x);total+=x.total;done+=x.completed;
+  const p=pct(x);if(x.total>0&&x.completed===x.total)topics++;
+  const st=p===100&&x.total?"Completed":p?"In Progress":"Not Started";
+  box.innerHTML+=`<div class="card module">
+   <div class="top"><div class="num">${i+1}</div><div class="name">${esc(x.name)}</div><span class="status ${st==="Completed"?"done":st==="In Progress"?"go":""}">${st}</span></div>
+   <div class="moduleinfo"><span>${x.completed} / ${x.total} classes</span><b>${p.toFixed(1)}%</b></div>
+   <div class="progress"><div class="bar" style="width:${p}%"></div></div>
+  </div>`;
+ });
+ const left=total-done, overall=total?done/total*100:0;
+ document.getElementById("overall").textContent=overall.toFixed(1)+"%";
+ document.getElementById("overall2").textContent=overall.toFixed(1)+"%";
+ document.getElementById("doneClasses").textContent=done;
+ document.getElementById("leftClasses").textContent=left;
+ document.getElementById("doneTopics").textContent=topics+" / 26";
+ document.getElementById("topicSummary").textContent=topics+" / 26 completed";
+ document.getElementById("summary").textContent=`${done} of ${total} classes completed`;
+ document.getElementById("overallBar").style.width=overall+"%";
+ updatePace(left);renderHistory();
+}
+function daysLeft(){
+ if(!data.examDate)return 0;
+ return Math.max(0,Math.ceil((new Date(data.examDate+"T23:59:59")-new Date())/86400000));
+}
+function updatePace(left){
+ const days=daysLeft(),pace=days?left/days:0;
+ document.getElementById("pace").textContent=days?pace.toFixed(1)+" Classes/Day":"—";
+ document.getElementById("paceNote").textContent=!data.examDate?"Set the exam date to calculate the required daily pace.":left===0?"All class targets are completed.":days===0?"Exam date has arrived or passed.":`${left} classes remaining across ${days} days → ${pace.toFixed(1)} classes/day required.`;
+}
+function countdown(){
+ if(!data.examDate){["d","h","m","s"].forEach(i=>document.getElementById(i).textContent=0);document.getElementById("examLabel").textContent="Not set";return}
+ const t=new Date(data.examDate+"T23:59:59"),diff=t-new Date();
+ if(diff<=0){["d","h","m","s"].forEach(i=>document.getElementById(i).textContent=0);document.getElementById("examLabel").textContent="EXAM DATE PASSED";return}
+ let z=diff;const d=Math.floor(z/86400000);z%=86400000;const h=Math.floor(z/3600000);z%=3600000;const m=Math.floor(z/60000);const s=Math.floor(z/1000)%60;
+ document.getElementById("d").textContent=d;document.getElementById("h").textContent=h;document.getElementById("m").textContent=m;document.getElementById("s").textContent=s;
+ document.getElementById("examLabel").textContent=new Date(data.examDate+"T00:00:00").toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+}
+function saveExam(){const v=document.getElementById("examDate").value;if(!v){alert("Select an exam date.");return}data.examDate=v;save();render();countdown()}
+function key(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function saveDaily(){
+ const date=document.getElementById("date").value;if(!date){alert("Select date.");return}
+ const planned=Math.max(0,Number(document.getElementById("planned").value)||0),done=Math.max(0,Number(document.getElementById("dailyDone").value)||0);
+ if(planned&&done>planned){alert("Completed cannot exceed planned.");return}
+ data.daily[date]={planned,completed:done,hours:Math.max(0,Number(document.getElementById("hours").value)||0),notes:document.getElementById("notes").value.trim()};
+ save();renderHistory();alert("Daily progress saved locally.")
+}
+function renderHistory(){
+ const body=document.getElementById("history"),arr=Object.entries(data.daily).sort((a,b)=>b[0].localeCompare(a[0]));
+ body.innerHTML=arr.length?arr.map(([d,v])=>`<tr><td>${esc(d)}</td><td>${v.planned||0}</td><td>${v.completed||0}</td><td>${v.hours||0}</td><td>${esc(v.notes||"")}</td></tr>`).join(""):`<tr><td colspan="5">No records yet.</td></tr>`;
+ let streak=0,cur=new Date();const set=new Set(arr.filter(([d,v])=>(v.completed||0)>0||(v.hours||0)>0).map(x=>x[0]));
+ while(set.has(key(cur))){streak++;cur.setDate(cur.getDate()-1)}
+ document.getElementById("streak").textContent="Streak: "+streak+" day"+(streak===1?"":"s");
+}
+function clearDaily(){["planned","dailyDone","hours","notes"].forEach(id=>document.getElementById(id).value="")}
+function exportData(){
+ const blob=new Blob([JSON.stringify({app:"CMA Syllabus Tracker",version:2,exportedAt:new Date().toISOString(),data},null,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="cma-syllabus-tracker-backup.json";a.click();URL.revokeObjectURL(a.href);
+}
+function importData(e){
+ const f=e.target.files[0];if(!f)return;
+ const r=new FileReader();r.onload=ev=>{try{
+  const incoming=JSON.parse(ev.target.result).data||JSON.parse(ev.target.result);
+  if(!incoming||!Array.isArray(incoming.modules))throw 0;
+  const freshData=fresh();freshData.examDate=typeof incoming.examDate==="string"?incoming.examDate:"";freshData.daily=incoming.daily||{};
+  freshData.modules=SYLLABUS.map((name,i)=>{const x=incoming.modules[i]||{};return{name,total:Math.max(0,Number(x.total)||0),completed:Math.min(Math.max(0,Number(x.total)||0),Math.max(0,Number(x.completed)||0))}});
+  data=freshData;save();document.getElementById("examDate").value=data.examDate;render();loadEditor();countdown();alert("Backup imported successfully.");
+ }catch(err){alert("Invalid backup file. Existing data was not changed.")}e.target.value=""};r.readAsText(f)
+}
+function resetAll(){if(confirm("Delete all tracker data from this browser?")){localStorage.removeItem(KEY);data=fresh();document.getElementById("examDate").value="";buildSelect();render();countdown();clearDaily()}}
+function init(){
+ const today=key(new Date());document.getElementById("date").value=today;document.getElementById("examDate").value=data.examDate;
+ buildSelect();render();countdown();
+ if(data.daily[today]){const v=data.daily[today];document.getElementById("planned").value=v.planned||"";document.getElementById("dailyDone").value=v.completed||"";document.getElementById("hours").value=v.hours||"";document.getElementById("notes").value=v.notes||""}
+ setInterval(()=>{countdown();updatePace(data.modules.reduce((a,x)=>a+Math.max(0,x.total-x.completed),0))},1000);
+}
+init();
+</script>
+</body>
+</html>
